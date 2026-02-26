@@ -7,16 +7,27 @@
   <meta name="description" content="Free online tools: word counter, JSON formatter, password generator, Base64 encoder, hash generator, UUID generator, color converter, and more.">
   <meta name="keywords" content="word counter, JSON formatter, password generator, Base64 encoder, hash generator, UUID generator, color converter, online tools, free tools, developer tools">
   <link rel="canonical" href="https://quicktools.online">
+  <!-- Google AdSense -->
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-0487329598065195" crossorigin="anonymous"></script>
   <style>
     :root {
-      --bg: #0f0f1a;
-      --surface: #1a1a2e;
-      --surface2: #222240;
+      --bg: #0a0a14;
+      --surface: rgba(26, 26, 46, 0.7);
+      --surface-solid: #1a1a2e;
+      --surface2: rgba(34, 34, 64, 0.6);
       --accent: #e94560;
       --accent2: #0f3460;
-      --text: #eee;
-      --text2: #aaa;
-      --radius: 12px;
+      --accent-glow: rgba(233, 69, 96, 0.15);
+      --text: #f0f0f5;
+      --text2: #8888aa;
+      --radius: 16px;
+      --radius-sm: 10px;
+      --glass-border: rgba(255, 255, 255, 0.08);
+      --glass-bg: rgba(26, 26, 46, 0.55);
+      --transition: cubic-bezier(0.4, 0, 0.2, 1);
+      --shadow-card: 0 4px 24px rgba(0, 0, 0, 0.3), 0 0 0 1px var(--glass-border);
+      --shadow-hover: 0 8px 32px rgba(233, 69, 96, 0.12), 0 0 0 1px rgba(233, 69, 96, 0.2);
+      --font-mono: 'Cascadia Code', 'Consolas', 'Monaco', monospace;
     }
     * { margin: 0; padding: 0; box-sizing: border-box; }
     body {
@@ -24,121 +35,149 @@
       background: var(--bg);
       color: var(--text);
       min-height: 100vh;
+      background-image:
+        radial-gradient(ellipse at 20% 50%, rgba(15, 52, 96, 0.15) 0%, transparent 50%),
+        radial-gradient(ellipse at 80% 20%, rgba(233, 69, 96, 0.08) 0%, transparent 50%);
+      background-attachment: fixed;
     }
+
+    /* ── Header ───────────────────────────────────────── */
     header {
       text-align: center;
-      padding: 40px 20px 20px;
-      background: linear-gradient(135deg, var(--surface) 0%, var(--accent2) 100%);
-      border-bottom: 2px solid var(--accent);
+      padding: 48px 20px 28px;
+      background: linear-gradient(135deg, rgba(26, 26, 46, 0.9) 0%, rgba(15, 52, 96, 0.5) 100%);
+      border-bottom: 1px solid var(--glass-border);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
     }
-    header h1 { font-size: 2.2rem; margin-bottom: 8px; }
+    .header-content { max-width: 800px; margin: 0 auto; }
+    header h1 { font-size: 2.5rem; margin-bottom: 8px; font-weight: 800; letter-spacing: -0.5px; }
     header h1 span { color: var(--accent); }
-    header p { color: var(--text2); font-size: 1.1rem; }
+    header p { color: var(--text2); font-size: 1.1rem; margin-bottom: 16px; }
+    .github-badge {
+      display: inline-flex; align-items: center; gap: 8px;
+      background: rgba(255,255,255,0.06); border: 1px solid var(--glass-border);
+      color: var(--text2); padding: 8px 18px; border-radius: 100px;
+      font-size: 0.85rem; font-weight: 500; text-decoration: none;
+      transition: all 0.25s var(--transition);
+    }
+    .github-badge:hover {
+      color: var(--text); background: rgba(255,255,255,0.1);
+      border-color: rgba(255,255,255,0.2); transform: translateY(-1px);
+    }
 
-    /* Ad placeholder */
+    /* ── Ad Banners ───────────────────────────────────── */
     .ad-banner {
-      background: var(--surface2);
-      text-align: center;
-      padding: 15px;
-      color: var(--text2);
-      font-size: 0.85rem;
-      border-bottom: 1px solid #333;
+      background: var(--surface2); text-align: center; padding: 15px;
+      color: var(--text2); font-size: 0.85rem; border-bottom: 1px solid rgba(255,255,255,0.04);
     }
 
-    nav {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
-      padding: 20px;
-      justify-content: center;
-      max-width: 900px;
-      margin: 0 auto;
+    /* ── Main Navigation (Tools / Demo) ───────────────── */
+    .main-nav {
+      display: flex; justify-content: center; gap: 4px;
+      max-width: 360px; margin: 20px auto 0;
+      background: rgba(10, 10, 20, 0.4); border-radius: 14px; padding: 5px;
+      border: 1px solid var(--glass-border);
     }
-    nav button {
-      background: var(--surface);
-      color: var(--text);
-      border: 1px solid #333;
-      padding: 10px 18px;
-      border-radius: 8px;
-      cursor: pointer;
-      font-size: 0.9rem;
-      transition: all 0.2s;
+    .main-nav-btn {
+      flex: 1; display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+      background: transparent; color: var(--text2); border: none;
+      padding: 11px 24px; border-radius: 10px; cursor: pointer;
+      font-size: 0.95rem; font-weight: 600; transition: all 0.3s var(--transition);
     }
-    nav button:hover, nav button.active {
-      background: var(--accent);
-      border-color: var(--accent);
+    .main-nav-btn:hover { color: var(--text); background: rgba(255,255,255,0.04); }
+    .main-nav-btn.active {
+      background: var(--accent); color: #fff;
+      box-shadow: 0 2px 12px rgba(233, 69, 96, 0.3);
     }
 
-    .container {
-      max-width: 800px;
-      margin: 0 auto;
-      padding: 20px;
+    /* ── Section Panels ───────────────────────────────── */
+    .section-panel { display: none; }
+    .section-panel.active { display: block; animation: fadeSlideIn 0.4s var(--transition) forwards; }
+    @keyframes fadeSlideIn {
+      from { opacity: 0; transform: translateY(12px); }
+      to { opacity: 1; transform: translateY(0); }
     }
+
+    /* ── Tool Navigation ──────────────────────────────── */
+    nav#tool-nav {
+      display: flex; flex-wrap: wrap; gap: 6px;
+      padding: 24px 20px; justify-content: center; max-width: 900px; margin: 0 auto;
+    }
+    nav#tool-nav button {
+      background: transparent; color: var(--text2); border: 1px solid transparent;
+      padding: 10px 20px; border-radius: 100px; cursor: pointer;
+      font-size: 0.88rem; font-weight: 500; transition: all 0.25s var(--transition);
+      white-space: nowrap;
+    }
+    nav#tool-nav button:hover {
+      color: var(--text); background: rgba(255,255,255,0.05); border-color: var(--glass-border);
+    }
+    nav#tool-nav button.active {
+      background: rgba(233, 69, 96, 0.12); color: var(--accent);
+      border-color: rgba(233, 69, 96, 0.3);
+    }
+
+    /* ── Container + Tool Panels ──────────────────────── */
+    .container { max-width: 800px; margin: 0 auto; padding: 20px; }
     .tool-panel {
       display: none;
-      background: var(--surface);
-      border-radius: var(--radius);
-      padding: 30px;
-      border: 1px solid #333;
+      background: var(--glass-bg); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+      border-radius: var(--radius); padding: 32px;
+      border: 1px solid var(--glass-border); box-shadow: var(--shadow-card);
+      transition: opacity 0.3s var(--transition), transform 0.3s var(--transition);
     }
     .tool-panel.active { display: block; }
     .tool-panel h2 { color: var(--accent); margin-bottom: 15px; font-size: 1.5rem; }
-    .tool-panel p.desc { color: var(--text2); margin-bottom: 20px; }
+    .tool-panel p.desc { color: var(--text2); margin-bottom: 20px; line-height: 1.5; }
 
+    /* ── Form Elements ────────────────────────────────── */
     textarea, input[type="text"], input[type="number"], select {
-      width: 100%;
-      background: var(--bg);
-      color: var(--text);
-      border: 1px solid #444;
-      border-radius: 8px;
-      padding: 12px;
-      font-size: 0.95rem;
-      font-family: 'Consolas', 'Monaco', monospace;
-      resize: vertical;
-      margin-bottom: 12px;
+      width: 100%; background: rgba(10, 10, 20, 0.5); color: var(--text);
+      border: 1px solid var(--glass-border); border-radius: var(--radius-sm);
+      padding: 14px; font-size: 0.95rem; font-family: var(--font-mono);
+      resize: vertical; margin-bottom: 14px;
+      transition: border-color 0.25s var(--transition), box-shadow 0.25s var(--transition);
     }
-    textarea:focus, input:focus { outline: none; border-color: var(--accent); }
+    textarea:focus, input:focus, select:focus {
+      outline: none; border-color: var(--accent);
+      box-shadow: 0 0 0 3px var(--accent-glow);
+    }
 
+    /* ── Buttons ──────────────────────────────────────── */
     .btn {
-      background: var(--accent);
-      color: #fff;
-      border: none;
-      padding: 12px 24px;
-      border-radius: 8px;
-      cursor: pointer;
-      font-size: 1rem;
-      font-weight: 600;
-      transition: opacity 0.2s;
-      margin-right: 8px;
-      margin-bottom: 8px;
+      background: var(--accent); color: #fff; border: none;
+      padding: 12px 28px; border-radius: var(--radius-sm);
+      cursor: pointer; font-size: 0.95rem; font-weight: 600;
+      transition: all 0.25s var(--transition);
+      margin-right: 8px; margin-bottom: 8px;
     }
-    .btn:hover { opacity: 0.85; }
+    .btn:hover { transform: translateY(-1px); box-shadow: 0 4px 16px rgba(233, 69, 96, 0.3); }
+    .btn:active { transform: translateY(0) scale(0.98); }
     .btn-secondary { background: var(--accent2); }
+    .btn-secondary:hover { box-shadow: 0 4px 16px rgba(15, 52, 96, 0.4); }
 
+    /* ── Results ──────────────────────────────────────── */
     .result {
-      background: var(--bg);
-      border: 1px solid #444;
-      border-radius: 8px;
-      padding: 15px;
-      margin-top: 15px;
-      font-family: 'Consolas', monospace;
-      white-space: pre-wrap;
-      word-break: break-all;
-      max-height: 400px;
-      overflow-y: auto;
+      background: rgba(10, 10, 20, 0.6); border: 1px solid var(--glass-border);
+      border-radius: var(--radius-sm); padding: 16px; margin-top: 16px;
+      font-family: var(--font-mono); white-space: pre-wrap;
+      word-break: break-all; max-height: 400px; overflow-y: auto;
     }
 
+    /* ── Stats Grid ───────────────────────────────────── */
     .stats-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
-      gap: 12px;
-      margin-top: 15px;
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+      gap: 12px; margin-top: 15px;
     }
     .stat-card {
-      background: var(--bg);
-      border-radius: 8px;
-      padding: 15px;
-      text-align: center;
+      background: var(--glass-bg); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+      border-radius: var(--radius-sm); padding: 20px 15px; text-align: center;
+      border: 1px solid var(--glass-border); transition: all 0.3s var(--transition);
+    }
+    .stat-card:hover {
+      border-color: rgba(233, 69, 96, 0.3); box-shadow: var(--shadow-hover);
+      transform: translateY(-2px);
     }
     .stat-card .number { font-size: 1.8rem; font-weight: 700; color: var(--accent); }
     .stat-card .label { font-size: 0.8rem; color: var(--text2); margin-top: 4px; }
@@ -146,194 +185,366 @@
     .row { display: flex; gap: 10px; align-items: center; margin-bottom: 12px; flex-wrap: wrap; }
     .row label { min-width: 80px; color: var(--text2); }
 
+    /* ── Color Preview + Wheel ────────────────────────── */
     .color-preview {
-      width: 80px;
-      height: 80px;
-      border-radius: 8px;
-      border: 2px solid #444;
-      display: inline-block;
-      vertical-align: middle;
+      width: 80px; height: 80px; border-radius: var(--radius-sm);
+      border: 2px solid var(--glass-border); display: inline-block; vertical-align: middle;
     }
+    .color-wheel-wrap {
+      display: flex; align-items: flex-start; gap: 24px; margin-bottom: 20px; flex-wrap: wrap;
+    }
+    .color-wheel-container {
+      position: relative; display: inline-block; cursor: crosshair; flex-shrink: 0;
+    }
+    .color-wheel-container canvas { border-radius: 50%; }
+    #color-wheel { box-shadow: 0 0 24px rgba(233, 69, 96, 0.08); }
+    #color-wheel-cursor { position: absolute; top: 0; left: 0; pointer-events: none; }
+    .color-wheel-label { text-align: center; color: var(--text2); font-size: 0.78rem; margin-top: 8px; }
+    .color-wheel-inputs { flex: 1; min-width: 200px; }
 
+    /* ── Footer ───────────────────────────────────────── */
     footer {
-      text-align: center;
-      padding: 40px 20px;
-      color: var(--text2);
-      font-size: 0.85rem;
+      text-align: center; padding: 48px 20px; color: var(--text2);
+      font-size: 0.85rem; border-top: 1px solid var(--glass-border);
     }
+    .footer-links { margin-bottom: 16px; }
+    .footer-github {
+      display: inline-flex; align-items: center; gap: 6px;
+      color: var(--text2); text-decoration: none; transition: color 0.2s;
+    }
+    .footer-github:hover { color: var(--accent); }
 
     .copy-btn {
-      background: var(--accent2);
-      color: #fff;
-      border: none;
-      padding: 4px 12px;
-      border-radius: 4px;
-      cursor: pointer;
-      font-size: 0.8rem;
-      float: right;
+      background: var(--accent2); color: #fff; border: none;
+      padding: 4px 12px; border-radius: 4px; cursor: pointer;
+      font-size: 0.8rem; float: right; transition: opacity 0.2s;
     }
+    .copy-btn:hover { opacity: 0.8; }
 
-    /* SEO: structured tool descriptions */
-    .seo-section {
-      max-width: 800px;
-      margin: 40px auto;
-      padding: 0 20px;
-    }
+    /* ── SEO Section ──────────────────────────────────── */
+    .seo-section { max-width: 800px; margin: 40px auto; padding: 0 20px; }
     .seo-section h3 { color: var(--accent); margin: 20px 0 8px; }
     .seo-section p { color: var(--text2); line-height: 1.6; margin-bottom: 10px; }
 
-    @media (max-width: 600px) {
-      header h1 { font-size: 1.5rem; }
-      nav button { padding: 8px 12px; font-size: 0.8rem; }
-      .tool-panel { padding: 20px; }
+    /* ── WIP Card (Demo Tab) ──────────────────────────── */
+    .wip-card {
+      background: var(--glass-bg); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+      border: 1px solid var(--glass-border); border-radius: var(--radius);
+      padding: 60px 40px; text-align: center; box-shadow: var(--shadow-card);
+      max-width: 600px; margin: 40px auto;
+    }
+    .wip-icon { margin-bottom: 24px; animation: wipPulse 3s ease-in-out infinite; }
+    @keyframes wipPulse {
+      0%, 100% { opacity: 0.7; transform: scale(1); }
+      50% { opacity: 1; transform: scale(1.05); }
+    }
+    .wip-title { font-size: 2rem; font-weight: 800; color: var(--text); margin-bottom: 8px; letter-spacing: -0.5px; }
+    .wip-subtitle { color: var(--accent); font-size: 1.1rem; font-weight: 500; margin-bottom: 28px; }
+    .wip-tags {
+      display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; margin-bottom: 28px;
+    }
+    .wip-tag {
+      background: rgba(233, 69, 96, 0.1); color: var(--accent);
+      border: 1px solid rgba(233, 69, 96, 0.2);
+      padding: 6px 16px; border-radius: 100px; font-size: 0.82rem; font-weight: 500;
+      transition: all 0.25s var(--transition);
+    }
+    .wip-tag:hover { background: rgba(233, 69, 96, 0.18); transform: translateY(-1px); }
+    .wip-description { color: var(--text2); line-height: 1.7; margin-bottom: 32px; }
+    .wip-description p { margin-bottom: 10px; }
+    .wip-progress { max-width: 300px; margin: 0 auto; }
+    .wip-progress-bar {
+      height: 4px; background: rgba(255,255,255,0.06);
+      border-radius: 4px; overflow: hidden; margin-bottom: 10px;
+    }
+    .wip-progress-fill {
+      height: 100%; width: 35%;
+      background: linear-gradient(90deg, var(--accent), var(--accent2));
+      border-radius: 4px; animation: wipShimmer 2.5s ease-in-out infinite;
+    }
+    @keyframes wipShimmer {
+      0% { opacity: 0.6; width: 30%; }
+      50% { opacity: 1; width: 40%; }
+      100% { opacity: 0.6; width: 30%; }
+    }
+    .wip-progress-text { color: var(--text2); font-size: 0.8rem; font-style: italic; }
+
+    /* ── Responsive ───────────────────────────────────── */
+    @media (max-width: 768px) {
+      header { padding: 36px 16px 24px; }
+      header h1 { font-size: 2rem; }
+      .main-nav { max-width: 300px; }
+      .main-nav-btn { padding: 10px 20px; font-size: 0.9rem; }
+      nav#tool-nav { gap: 4px; padding: 16px 12px; }
+      nav#tool-nav button { padding: 8px 14px; font-size: 0.82rem; }
+      .container { padding: 16px; }
+      .tool-panel { padding: 24px; }
+      .wip-card { padding: 40px 24px; margin: 24px auto; }
+      .wip-title { font-size: 1.5rem; }
+      #color-wheel, #color-wheel-cursor { width: 180px !important; height: 180px !important; }
+    }
+    @media (max-width: 480px) {
+      header h1 { font-size: 1.6rem; }
+      header p { font-size: 0.95rem; }
+      .main-nav { max-width: 260px; }
+      .main-nav-btn { padding: 9px 16px; font-size: 0.85rem; gap: 6px; }
+      .main-nav-btn svg { width: 14px; height: 14px; }
+      nav#tool-nav { gap: 3px; }
+      nav#tool-nav button { padding: 7px 11px; font-size: 0.78rem; }
+      .tool-panel { padding: 18px; }
+      .stats-grid { grid-template-columns: repeat(2, 1fr); }
+      .wip-card { padding: 32px 18px; }
+      .wip-title { font-size: 1.3rem; }
+      .wip-tags { gap: 6px; }
+      .wip-tag { font-size: 0.75rem; padding: 5px 12px; }
+      .github-badge { font-size: 0.8rem; padding: 6px 14px; }
+      #color-wheel, #color-wheel-cursor { width: 160px !important; height: 160px !important; }
+      .color-wheel-wrap { justify-content: center; }
     }
   </style>
 </head>
 <body>
+
+  <!-- ── Header ─────────────────────────────────────── -->
   <header>
-    <h1>Quick<span>Tools</span> Online</h1>
-    <p>Free developer and writer utilities — no signup required</p>
+    <div class="header-content">
+      <h1>Quick<span>Tools</span> Online</h1>
+      <p>Free developer and writer utilities &mdash; no signup required</p>
+      <a href="https://github.com/leopechnicki/quicktools-online" target="_blank" rel="noopener noreferrer" class="github-badge" aria-label="View source on GitHub">
+        <svg width="20" height="20" viewBox="0 0 16 16" fill="currentColor"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg>
+        <span>Open Source</span>
+      </a>
+    </div>
   </header>
 
-  <!-- Ad placement: replace with your Google AdSense code -->
+  <!-- ── Google AdSense: Top Banner Ad ──────────────── -->
   <div class="ad-banner" id="ad-top">
-    <!-- Google AdSense or Ezoic ad code goes here -->
-    <div style="height:90px;display:flex;align-items:center;justify-content:center;border:1px dashed #555;border-radius:8px;">
-      Ad Space — Replace with AdSense/Ezoic code
+    <ins class="adsbygoogle"
+         style="display:block"
+         data-ad-client="ca-pub-0487329598065195"
+         data-ad-slot="4973931243"
+         data-ad-format="auto"
+         data-full-width-responsive="true"></ins>
+    <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+  </div>
+
+  <!-- ── Main Navigation (Tools / Demo) ─────────────── -->
+  <div class="main-nav" id="main-nav">
+    <button class="main-nav-btn active" data-section="tools-section">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>
+      Tools
+    </button>
+    <button class="main-nav-btn" data-section="demo-section">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
+      Demo
+    </button>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════ -->
+  <!-- ── TOOLS SECTION ─────────────────────────────── -->
+  <!-- ══════════════════════════════════════════════════ -->
+  <div class="section-panel active" id="tools-section">
+
+    <nav id="tool-nav">
+      <button data-tool="word-counter" class="active">Word Counter</button>
+      <button data-tool="json-formatter">JSON Formatter</button>
+      <button data-tool="password-gen">Password Gen</button>
+      <button data-tool="base64">Base64</button>
+      <button data-tool="hash-gen">Hash Generator</button>
+      <button data-tool="uuid-gen">UUID Generator</button>
+      <button data-tool="lorem">Lorem Ipsum</button>
+      <button data-tool="color-convert">Color Converter</button>
+    </nav>
+
+    <div class="container">
+      <!-- Word Counter -->
+      <div class="tool-panel active" id="word-counter">
+        <h2>Word Counter</h2>
+        <p class="desc">Paste your text to get instant word, character, sentence, and paragraph counts with estimated reading time.</p>
+        <textarea id="wc-input" rows="8" placeholder="Paste or type your text here..."></textarea>
+        <div class="stats-grid" id="wc-stats">
+          <div class="stat-card"><div class="number" id="wc-words">0</div><div class="label">Words</div></div>
+          <div class="stat-card"><div class="number" id="wc-chars">0</div><div class="label">Characters</div></div>
+          <div class="stat-card"><div class="number" id="wc-chars-ns">0</div><div class="label">No Spaces</div></div>
+          <div class="stat-card"><div class="number" id="wc-sentences">0</div><div class="label">Sentences</div></div>
+          <div class="stat-card"><div class="number" id="wc-paragraphs">0</div><div class="label">Paragraphs</div></div>
+          <div class="stat-card"><div class="number" id="wc-reading">0 min</div><div class="label">Reading Time</div></div>
+        </div>
+      </div>
+
+      <!-- JSON Formatter -->
+      <div class="tool-panel" id="json-formatter">
+        <h2>JSON Formatter &amp; Validator</h2>
+        <p class="desc">Paste your JSON to format, validate, and beautify it instantly.</p>
+        <textarea id="json-input" rows="8" placeholder='{"key": "value", "items": [1,2,3]}'></textarea>
+        <div class="row">
+          <label>Indent:</label>
+          <select id="json-indent" style="width:auto">
+            <option value="2">2 spaces</option>
+            <option value="4">4 spaces</option>
+            <option value="\t">Tab</option>
+          </select>
+          <button class="btn" onclick="formatJSON()">Format</button>
+          <button class="btn btn-secondary" onclick="minifyJSON()">Minify</button>
+        </div>
+        <div class="result" id="json-result" style="display:none"></div>
+      </div>
+
+      <!-- Password Generator -->
+      <div class="tool-panel" id="password-gen">
+        <h2>Password Generator</h2>
+        <p class="desc">Generate strong, random passwords instantly.</p>
+        <div class="row">
+          <label>Length:</label>
+          <input type="number" id="pw-length" value="16" min="4" max="128" style="width:80px">
+        </div>
+        <div class="row">
+          <label><input type="checkbox" id="pw-upper" checked> Uppercase</label>
+          <label><input type="checkbox" id="pw-lower" checked> Lowercase</label>
+          <label><input type="checkbox" id="pw-numbers" checked> Numbers</label>
+          <label><input type="checkbox" id="pw-symbols" checked> Symbols</label>
+        </div>
+        <button class="btn" onclick="generatePassword()">Generate Password</button>
+        <div class="result" id="pw-result" style="display:none"></div>
+      </div>
+
+      <!-- Base64 -->
+      <div class="tool-panel" id="base64">
+        <h2>Base64 Encoder / Decoder</h2>
+        <p class="desc">Encode or decode text using Base64 encoding.</p>
+        <textarea id="b64-input" rows="5" placeholder="Enter text to encode or decode..."></textarea>
+        <button class="btn" onclick="base64Action('encode')">Encode</button>
+        <button class="btn btn-secondary" onclick="base64Action('decode')">Decode</button>
+        <div class="result" id="b64-result" style="display:none"></div>
+      </div>
+
+      <!-- Hash Generator -->
+      <div class="tool-panel" id="hash-gen">
+        <h2>Hash Generator</h2>
+        <p class="desc">Generate MD5, SHA-1, SHA-256, and SHA-512 hashes from any text.</p>
+        <textarea id="hash-input" rows="4" placeholder="Enter text to hash..."></textarea>
+        <button class="btn" onclick="generateHash()">Generate Hashes</button>
+        <div id="hash-result" style="display:none;margin-top:15px"></div>
+      </div>
+
+      <!-- UUID Generator -->
+      <div class="tool-panel" id="uuid-gen">
+        <h2>UUID Generator</h2>
+        <p class="desc">Generate random UUIDs (v4) instantly.</p>
+        <div class="row">
+          <label>Count:</label>
+          <input type="number" id="uuid-count" value="5" min="1" max="100" style="width:80px">
+          <button class="btn" onclick="generateUUID()">Generate</button>
+        </div>
+        <div class="result" id="uuid-result" style="display:none"></div>
+      </div>
+
+      <!-- Lorem Ipsum -->
+      <div class="tool-panel" id="lorem">
+        <h2>Lorem Ipsum Generator</h2>
+        <p class="desc">Generate placeholder text for your designs and layouts.</p>
+        <div class="row">
+          <label>Count:</label>
+          <input type="number" id="lorem-count" value="3" min="1" max="50" style="width:80px">
+          <select id="lorem-type" style="width:auto">
+            <option value="paragraphs">Paragraphs</option>
+            <option value="sentences">Sentences</option>
+            <option value="words">Words</option>
+          </select>
+          <button class="btn" onclick="generateLorem()">Generate</button>
+        </div>
+        <div class="result" id="lorem-result" style="display:none"></div>
+      </div>
+
+      <!-- Color Converter -->
+      <div class="tool-panel" id="color-convert">
+        <h2>Color Converter</h2>
+        <p class="desc">Pick a color from the wheel or enter a value to convert between HEX, RGB, and HSL.</p>
+        <div class="color-wheel-wrap">
+          <div class="color-wheel-container">
+            <canvas id="color-wheel" width="220" height="220"></canvas>
+            <canvas id="color-wheel-cursor" width="220" height="220"></canvas>
+            <div class="color-wheel-label">Click or drag to pick</div>
+          </div>
+          <div class="color-wheel-inputs">
+            <div class="row">
+              <input type="text" id="color-input" placeholder="#e94560 or rgb(233, 69, 96)" style="flex:1">
+              <button class="btn" onclick="convertColor()">Convert</button>
+            </div>
+            <div id="color-result" style="display:none;margin-top:15px"></div>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- /.container -->
+  </div><!-- /#tools-section -->
+
+  <!-- ══════════════════════════════════════════════════ -->
+  <!-- ── DEMO SECTION ──────────────────────────────── -->
+  <!-- ══════════════════════════════════════════════════ -->
+  <div class="section-panel" id="demo-section">
+    <div class="container">
+      <div class="wip-card">
+        <div class="wip-icon">
+          <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="16 18 22 12 16 6"/>
+            <polyline points="8 6 2 12 8 18"/>
+          </svg>
+        </div>
+        <h2 class="wip-title">Work in Progress</h2>
+        <p class="wip-subtitle">Interactive component demos are coming soon</p>
+
+        <div class="wip-tags">
+          <span class="wip-tag">JavaScript</span>
+          <span class="wip-tag">TypeScript</span>
+          <span class="wip-tag">React Patterns</span>
+          <span class="wip-tag">CSS Animations</span>
+          <span class="wip-tag">Web APIs</span>
+          <span class="wip-tag">Frontend Components</span>
+        </div>
+
+        <div class="wip-description">
+          <p>This section will feature live, interactive demos showcasing modern frontend development patterns and reusable components.</p>
+          <p>Each demo will include working code examples you can explore, modify, and learn from &mdash; built with vanilla JavaScript and TypeScript.</p>
+        </div>
+
+        <div class="wip-progress">
+          <div class="wip-progress-bar">
+            <div class="wip-progress-fill"></div>
+          </div>
+          <span class="wip-progress-text">Building something cool...</span>
+        </div>
+      </div>
+    </div>
+  </div><!-- /#demo-section -->
+
+  <!-- ── Google AdSense: Mid-Content Ad ─────────────── -->
+  <div class="ad-banner" id="ad-mid">
+    <div style="max-width:800px;margin:0 auto;">
+      <ins class="adsbygoogle"
+           style="display:block"
+           data-ad-client="ca-pub-0487329598065195"
+           data-ad-slot="3517379348"
+           data-ad-format="auto"
+           data-full-width-responsive="true"></ins>
+      <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
     </div>
   </div>
 
-  <nav id="tool-nav">
-    <button data-tool="word-counter" class="active">Word Counter</button>
-    <button data-tool="json-formatter">JSON Formatter</button>
-    <button data-tool="password-gen">Password Gen</button>
-    <button data-tool="base64">Base64</button>
-    <button data-tool="hash-gen">Hash Generator</button>
-    <button data-tool="uuid-gen">UUID Generator</button>
-    <button data-tool="lorem">Lorem Ipsum</button>
-    <button data-tool="color-convert">Color Converter</button>
-  </nav>
-
-  <div class="container">
-    <!-- Word Counter -->
-    <div class="tool-panel active" id="word-counter">
-      <h2>Word Counter</h2>
-      <p class="desc">Paste your text to get instant word, character, sentence, and paragraph counts with estimated reading time.</p>
-      <textarea id="wc-input" rows="8" placeholder="Paste or type your text here..."></textarea>
-      <div class="stats-grid" id="wc-stats">
-        <div class="stat-card"><div class="number" id="wc-words">0</div><div class="label">Words</div></div>
-        <div class="stat-card"><div class="number" id="wc-chars">0</div><div class="label">Characters</div></div>
-        <div class="stat-card"><div class="number" id="wc-chars-ns">0</div><div class="label">No Spaces</div></div>
-        <div class="stat-card"><div class="number" id="wc-sentences">0</div><div class="label">Sentences</div></div>
-        <div class="stat-card"><div class="number" id="wc-paragraphs">0</div><div class="label">Paragraphs</div></div>
-        <div class="stat-card"><div class="number" id="wc-reading">0 min</div><div class="label">Reading Time</div></div>
-      </div>
-    </div>
-
-    <!-- JSON Formatter -->
-    <div class="tool-panel" id="json-formatter">
-      <h2>JSON Formatter & Validator</h2>
-      <p class="desc">Paste your JSON to format, validate, and beautify it instantly.</p>
-      <textarea id="json-input" rows="8" placeholder='{"key": "value", "items": [1,2,3]}'></textarea>
-      <div class="row">
-        <label>Indent:</label>
-        <select id="json-indent" style="width:auto">
-          <option value="2">2 spaces</option>
-          <option value="4">4 spaces</option>
-          <option value="\t">Tab</option>
-        </select>
-        <button class="btn" onclick="formatJSON()">Format</button>
-        <button class="btn btn-secondary" onclick="minifyJSON()">Minify</button>
-      </div>
-      <div class="result" id="json-result" style="display:none"></div>
-    </div>
-
-    <!-- Password Generator -->
-    <div class="tool-panel" id="password-gen">
-      <h2>Password Generator</h2>
-      <p class="desc">Generate strong, random passwords instantly.</p>
-      <div class="row">
-        <label>Length:</label>
-        <input type="number" id="pw-length" value="16" min="4" max="128" style="width:80px">
-      </div>
-      <div class="row">
-        <label><input type="checkbox" id="pw-upper" checked> Uppercase</label>
-        <label><input type="checkbox" id="pw-lower" checked> Lowercase</label>
-        <label><input type="checkbox" id="pw-numbers" checked> Numbers</label>
-        <label><input type="checkbox" id="pw-symbols" checked> Symbols</label>
-      </div>
-      <button class="btn" onclick="generatePassword()">Generate Password</button>
-      <div class="result" id="pw-result" style="display:none"></div>
-    </div>
-
-    <!-- Base64 -->
-    <div class="tool-panel" id="base64">
-      <h2>Base64 Encoder / Decoder</h2>
-      <p class="desc">Encode or decode text using Base64 encoding.</p>
-      <textarea id="b64-input" rows="5" placeholder="Enter text to encode or decode..."></textarea>
-      <button class="btn" onclick="base64Action('encode')">Encode</button>
-      <button class="btn btn-secondary" onclick="base64Action('decode')">Decode</button>
-      <div class="result" id="b64-result" style="display:none"></div>
-    </div>
-
-    <!-- Hash Generator -->
-    <div class="tool-panel" id="hash-gen">
-      <h2>Hash Generator</h2>
-      <p class="desc">Generate MD5, SHA-1, SHA-256, and SHA-512 hashes from any text.</p>
-      <textarea id="hash-input" rows="4" placeholder="Enter text to hash..."></textarea>
-      <button class="btn" onclick="generateHash()">Generate Hashes</button>
-      <div id="hash-result" style="display:none;margin-top:15px"></div>
-    </div>
-
-    <!-- UUID Generator -->
-    <div class="tool-panel" id="uuid-gen">
-      <h2>UUID Generator</h2>
-      <p class="desc">Generate random UUIDs (v4) instantly.</p>
-      <div class="row">
-        <label>Count:</label>
-        <input type="number" id="uuid-count" value="5" min="1" max="100" style="width:80px">
-        <button class="btn" onclick="generateUUID()">Generate</button>
-      </div>
-      <div class="result" id="uuid-result" style="display:none"></div>
-    </div>
-
-    <!-- Lorem Ipsum -->
-    <div class="tool-panel" id="lorem">
-      <h2>Lorem Ipsum Generator</h2>
-      <p class="desc">Generate placeholder text for your designs and layouts.</p>
-      <div class="row">
-        <label>Count:</label>
-        <input type="number" id="lorem-count" value="3" min="1" max="50" style="width:80px">
-        <select id="lorem-type" style="width:auto">
-          <option value="paragraphs">Paragraphs</option>
-          <option value="sentences">Sentences</option>
-          <option value="words">Words</option>
-        </select>
-        <button class="btn" onclick="generateLorem()">Generate</button>
-      </div>
-      <div class="result" id="lorem-result" style="display:none"></div>
-    </div>
-
-    <!-- Color Converter -->
-    <div class="tool-panel" id="color-convert">
-      <h2>Color Converter</h2>
-      <p class="desc">Convert between HEX, RGB, and HSL color formats.</p>
-      <div class="row">
-        <input type="text" id="color-input" placeholder="#e94560 or rgb(233, 69, 96)" style="flex:1">
-        <button class="btn" onclick="convertColor()">Convert</button>
-      </div>
-      <div id="color-result" style="display:none;margin-top:15px"></div>
-    </div>
-  </div>
-
-  <!-- Ad placement: replace with your Google AdSense code -->
+  <!-- ── Google AdSense: Bottom Ad ──────────────────── -->
   <div class="ad-banner" id="ad-bottom">
-    <div style="height:250px;display:flex;align-items:center;justify-content:center;border:1px dashed #555;border-radius:8px;max-width:800px;margin:0 auto;">
-      Ad Space — Replace with AdSense/Ezoic code
+    <div style="max-width:800px;margin:0 auto;">
+      <ins class="adsbygoogle"
+           style="display:block"
+           data-ad-client="ca-pub-0487329598065195"
+           data-ad-slot="9367783461"
+           data-ad-format="auto"
+           data-full-width-responsive="true"></ins>
+      <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
     </div>
   </div>
 
-  <!-- SEO content for search engines -->
+  <!-- ── SEO Content ────────────────────────────────── -->
   <div class="seo-section">
     <h3>Free Online Developer Tools</h3>
     <p>QuickTools Online provides free, fast, and privacy-friendly utilities for developers and writers. All tools run directly in your browser or on our servers with no data stored. No account required.</p>
@@ -345,30 +556,73 @@
     <p>Generate cryptographically secure random passwords. Customize length and character types for your security needs.</p>
   </div>
 
+  <!-- ── Footer ─────────────────────────────────────── -->
   <footer>
-    <p>QuickTools Online — Free utilities for developers and writers</p>
+    <div class="footer-links">
+      <a href="https://github.com/leopechnicki/quicktools-online" target="_blank" rel="noopener noreferrer" class="footer-github">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg>
+        View on GitHub
+      </a>
+    </div>
+    <p>QuickTools Online &mdash; Free utilities for developers and writers</p>
     <p style="margin-top:8px">&copy; 2025-2026 QuickTools. All rights reserved.</p>
   </footer>
 
+  <!-- ── JavaScript ─────────────────────────────────── -->
   <script>
-    // Tab navigation
-    document.querySelectorAll('#tool-nav button').forEach(btn => {
+    // ── Main Nav (Tools / Demo) ──────────────────────
+    document.querySelectorAll('#main-nav .main-nav-btn').forEach(btn => {
       btn.addEventListener('click', () => {
-        document.querySelectorAll('#tool-nav button').forEach(b => b.classList.remove('active'));
-        document.querySelectorAll('.tool-panel').forEach(p => p.classList.remove('active'));
+        const targetId = btn.dataset.section;
+        document.querySelectorAll('#main-nav .main-nav-btn').forEach(b => b.classList.remove('active'));
         btn.classList.add('active');
-        document.getElementById(btn.dataset.tool).classList.add('active');
+        document.querySelectorAll('.section-panel').forEach(panel => {
+          panel.classList.remove('active');
+        });
+        const target = document.getElementById(targetId);
+        target.classList.add('active');
       });
     });
 
-    // Helper: copy to clipboard
-    function copyText(text) {
-      navigator.clipboard.writeText(text).then(() => {
-        // Brief visual feedback could be added
+    // ── Tool Tab Navigation with Animation ───────────
+    document.querySelectorAll('#tool-nav button').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const currentActive = document.querySelector('#tools-section .tool-panel.active');
+        const targetId = btn.dataset.tool;
+        const target = document.getElementById(targetId);
+        if (currentActive === target) return;
+
+        document.querySelectorAll('#tool-nav button').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+
+        if (currentActive) {
+          currentActive.style.opacity = '0';
+          currentActive.style.transform = 'translateY(8px)';
+          setTimeout(() => {
+            currentActive.classList.remove('active');
+            currentActive.style.display = 'none';
+            currentActive.style.opacity = '';
+            currentActive.style.transform = '';
+            target.style.display = 'block';
+            target.style.opacity = '0';
+            target.style.transform = 'translateY(8px)';
+            void target.offsetHeight; // force reflow
+            target.classList.add('active');
+            target.style.transition = 'opacity 0.3s var(--transition), transform 0.3s var(--transition)';
+            target.style.opacity = '1';
+            target.style.transform = 'translateY(0)';
+            setTimeout(() => { target.style.transition = ''; }, 350);
+          }, 180);
+        }
       });
+    });
+
+    // ── Helper: Copy to Clipboard ────────────────────
+    function copyText(text) {
+      navigator.clipboard.writeText(text).then(() => {});
     }
 
-    // Word Counter - live update
+    // ── Word Counter ─────────────────────────────────
     document.getElementById('wc-input').addEventListener('input', function() {
       const text = this.value;
       if (!text.trim()) {
@@ -383,7 +637,6 @@
       const sentences = text.split(/[.!?]+/).filter(s => s.trim().length > 0).length;
       const paragraphs = text.split(/\n\n+/).filter(p => p.trim().length > 0).length || (text.trim() ? 1 : 0);
       const readingTime = Math.max(1, Math.ceil(words / 200));
-
       document.getElementById('wc-words').textContent = words.toLocaleString();
       document.getElementById('wc-chars').textContent = chars.toLocaleString();
       document.getElementById('wc-chars-ns').textContent = charsNS.toLocaleString();
@@ -392,7 +645,7 @@
       document.getElementById('wc-reading').textContent = `${readingTime} min`;
     });
 
-    // JSON Formatter
+    // ── JSON Formatter ───────────────────────────────
     function formatJSON() {
       const input = document.getElementById('json-input').value;
       const indentVal = document.getElementById('json-indent').value;
@@ -401,12 +654,10 @@
       try {
         const parsed = JSON.parse(input);
         resultEl.textContent = JSON.stringify(parsed, null, indent);
-        resultEl.style.display = 'block';
-        resultEl.style.color = '#4ade80';
+        resultEl.style.display = 'block'; resultEl.style.color = '#4ade80';
       } catch (e) {
         resultEl.textContent = 'Invalid JSON: ' + e.message;
-        resultEl.style.display = 'block';
-        resultEl.style.color = '#ef4444';
+        resultEl.style.display = 'block'; resultEl.style.color = '#ef4444';
       }
     }
     function minifyJSON() {
@@ -414,41 +665,35 @@
       const resultEl = document.getElementById('json-result');
       try {
         resultEl.textContent = JSON.stringify(JSON.parse(input));
-        resultEl.style.display = 'block';
-        resultEl.style.color = '#4ade80';
+        resultEl.style.display = 'block'; resultEl.style.color = '#4ade80';
       } catch (e) {
         resultEl.textContent = 'Invalid JSON: ' + e.message;
-        resultEl.style.display = 'block';
-        resultEl.style.color = '#ef4444';
+        resultEl.style.display = 'block'; resultEl.style.color = '#ef4444';
       }
     }
 
-    // Password Generator
+    // ── Password Generator ───────────────────────────
     async function generatePassword() {
       const length = document.getElementById('pw-length').value;
       const upper = document.getElementById('pw-upper').checked;
       const lower = document.getElementById('pw-lower').checked;
       const numbers = document.getElementById('pw-numbers').checked;
       const symbols = document.getElementById('pw-symbols').checked;
-
-      // Client-side generation for speed
       let chars = '';
       if (lower) chars += 'abcdefghijklmnopqrstuvwxyz';
       if (upper) chars += 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
       if (numbers) chars += '0123456789';
       if (symbols) chars += '!@#$%^&*()_+-=[]{}|;:,.<>?';
       if (!chars) chars = 'abcdefghijklmnopqrstuvwxyz';
-
       const array = new Uint32Array(parseInt(length));
       crypto.getRandomValues(array);
       const password = Array.from(array).map(n => chars[n % chars.length]).join('');
-
       const resultEl = document.getElementById('pw-result');
       resultEl.innerHTML = `<button class="copy-btn" onclick="copyText('${password.replace(/'/g, "\\'")}')">Copy</button>${password}`;
       resultEl.style.display = 'block';
     }
 
-    // Base64
+    // ── Base64 ───────────────────────────────────────
     function base64Action(action) {
       const input = document.getElementById('b64-input').value;
       const resultEl = document.getElementById('b64-result');
@@ -465,21 +710,18 @@
       }
     }
 
-    // Hash Generator
+    // ── Hash Generator ───────────────────────────────
     async function generateHash() {
       const input = document.getElementById('hash-input').value;
       const encoder = new TextEncoder();
       const data = encoder.encode(input);
-
       async function hash(algo) {
         const hashBuffer = await crypto.subtle.digest(algo, data);
         return Array.from(new Uint8Array(hashBuffer)).map(b => b.toString(16).padStart(2, '0')).join('');
       }
-
       const [sha1, sha256, sha512] = await Promise.all([
         hash('SHA-1'), hash('SHA-256'), hash('SHA-512')
       ]);
-
       const resultEl = document.getElementById('hash-result');
       resultEl.style.display = 'block';
       resultEl.innerHTML = `
@@ -489,7 +731,7 @@
       `;
     }
 
-    // UUID Generator
+    // ── UUID Generator ───────────────────────────────
     function generateUUID() {
       const count = parseInt(document.getElementById('uuid-count').value) || 5;
       const uuids = Array.from({ length: Math.min(count, 100) }, () => crypto.randomUUID());
@@ -498,12 +740,11 @@
       resultEl.style.display = 'block';
     }
 
-    // Lorem Ipsum
+    // ── Lorem Ipsum ──────────────────────────────────
     function generateLorem() {
       const count = parseInt(document.getElementById('lorem-count').value) || 3;
       const type = document.getElementById('lorem-type').value;
       const words = 'lorem ipsum dolor sit amet consectetur adipiscing elit sed do eiusmod tempor incididunt ut labore et dolore magna aliqua ut enim ad minim veniam quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur excepteur sint occaecat cupidatat non proident sunt in culpa qui officia deserunt mollit anim id est laborum'.split(' ');
-
       function randWord() { return words[Math.floor(Math.random() * words.length)]; }
       function randSentence() {
         const len = 8 + Math.floor(Math.random() * 15);
@@ -514,22 +755,19 @@
       function randParagraph() {
         return Array.from({ length: 3 + Math.floor(Math.random() * 5) }, randSentence).join(' ');
       }
-
       let result;
       if (type === 'words') result = Array.from({ length: count }, randWord).join(' ');
       else if (type === 'sentences') result = Array.from({ length: count }, randSentence).join(' ');
       else result = Array.from({ length: count }, randParagraph).join('\n\n');
-
       const resultEl = document.getElementById('lorem-result');
       resultEl.innerHTML = `<button class="copy-btn" onclick="copyText(this.parentElement.textContent.replace('Copy','').trim())">Copy</button>` + result;
       resultEl.style.display = 'block';
     }
 
-    // Color Converter
+    // ── Color Converter ──────────────────────────────
     function convertColor() {
       const input = document.getElementById('color-input').value.trim();
       const resultEl = document.getElementById('color-result');
-
       let r, g, b;
       try {
         if (input.startsWith('#')) {
@@ -541,7 +779,6 @@
           [r, g, b] = input.match(/\d+/g).map(Number);
         } else if (input.startsWith('hsl')) {
           const [h, s, l] = input.match(/[\d.]+/g).map(Number);
-          // HSL to RGB conversion
           const sn = s / 100, ln = l / 100;
           const c = (1 - Math.abs(2 * ln - 1)) * sn;
           const x = c * (1 - Math.abs((h / 60) % 2 - 1));
@@ -559,7 +796,6 @@
         } else {
           throw new Error('Unsupported format');
         }
-
         const toHex = n => n.toString(16).padStart(2, '0');
         const max = Math.max(r, g, b) / 255, min = Math.min(r, g, b) / 255;
         const ln = (max + min) / 2;
@@ -572,19 +808,17 @@
           else if (gn === max) h = ((bn - rn) / d + 2) / 6;
           else h = ((rn - gn) / d + 4) / 6;
         }
-
         const hex = `#${toHex(r)}${toHex(g)}${toHex(b)}`;
         const rgb = `rgb(${r}, ${g}, ${b})`;
         const hsl = `hsl(${Math.round(h*360)}, ${Math.round(s*100)}%, ${Math.round(ln*100)}%)`;
-
         resultEl.style.display = 'block';
         resultEl.innerHTML = `
           <div style="display:flex;gap:20px;align-items:center;flex-wrap:wrap">
             <div class="color-preview" style="background:${hex}"></div>
             <div>
-              <div class="result" style="margin-bottom:8px;display:inline-block;padding:8px 16px"><strong>HEX:</strong> ${hex}</div><br>
-              <div class="result" style="margin-bottom:8px;display:inline-block;padding:8px 16px"><strong>RGB:</strong> ${rgb}</div><br>
-              <div class="result" style="display:inline-block;padding:8px 16px"><strong>HSL:</strong> ${hsl}</div>
+              <div class="result" style="margin-bottom:8px;display:inline-block;padding:8px 16px"><button class="copy-btn" onclick="copyText('${hex}')">Copy</button><strong>HEX:</strong> ${hex}</div><br>
+              <div class="result" style="margin-bottom:8px;display:inline-block;padding:8px 16px"><button class="copy-btn" onclick="copyText('${rgb}')">Copy</button><strong>RGB:</strong> ${rgb}</div><br>
+              <div class="result" style="display:inline-block;padding:8px 16px"><button class="copy-btn" onclick="copyText('${hsl}')">Copy</button><strong>HSL:</strong> ${hsl}</div>
             </div>
           </div>
         `;
@@ -594,8 +828,94 @@
       }
     }
 
-    // Initialize: generate a password on load
+    // ── Color Wheel ──────────────────────────────────
+    function initColorWheel() {
+      const canvas = document.getElementById('color-wheel');
+      if (!canvas) return;
+      const ctx = canvas.getContext('2d');
+      const cursorCanvas = document.getElementById('color-wheel-cursor');
+      const cursorCtx = cursorCanvas.getContext('2d');
+      const size = canvas.width;
+      const center = size / 2;
+      const radius = center - 5;
+
+      // Draw hue-saturation wheel
+      const imageData = ctx.createImageData(size, size);
+      for (let y = 0; y < size; y++) {
+        for (let x = 0; x < size; x++) {
+          const dx = x - center;
+          const dy = y - center;
+          const dist = Math.sqrt(dx * dx + dy * dy);
+          if (dist <= radius) {
+            const angle = Math.atan2(dy, dx);
+            const hue = ((angle * 180 / Math.PI) + 360) % 360;
+            const sat = dist / radius;
+            const light = 0.5;
+            const c = (1 - Math.abs(2 * light - 1)) * sat;
+            const hSec = hue / 60;
+            const xv = c * (1 - Math.abs(hSec % 2 - 1));
+            const m = light - c / 2;
+            let r1, g1, b1;
+            if (hSec < 1) [r1, g1, b1] = [c, xv, 0];
+            else if (hSec < 2) [r1, g1, b1] = [xv, c, 0];
+            else if (hSec < 3) [r1, g1, b1] = [0, c, xv];
+            else if (hSec < 4) [r1, g1, b1] = [0, xv, c];
+            else if (hSec < 5) [r1, g1, b1] = [xv, 0, c];
+            else [r1, g1, b1] = [c, 0, xv];
+            const idx = (y * size + x) * 4;
+            imageData.data[idx]     = Math.round((r1 + m) * 255);
+            imageData.data[idx + 1] = Math.round((g1 + m) * 255);
+            imageData.data[idx + 2] = Math.round((b1 + m) * 255);
+            imageData.data[idx + 3] = 255;
+          }
+        }
+      }
+      ctx.putImageData(imageData, 0, 0);
+
+      function drawCursor(x, y) {
+        cursorCtx.clearRect(0, 0, size, size);
+        cursorCtx.beginPath();
+        cursorCtx.arc(x, y, 8, 0, Math.PI * 2);
+        cursorCtx.strokeStyle = '#fff';
+        cursorCtx.lineWidth = 2.5;
+        cursorCtx.stroke();
+        cursorCtx.beginPath();
+        cursorCtx.arc(x, y, 6, 0, Math.PI * 2);
+        cursorCtx.strokeStyle = '#000';
+        cursorCtx.lineWidth = 1;
+        cursorCtx.stroke();
+      }
+
+      function pickColor(e) {
+        const rect = canvas.getBoundingClientRect();
+        const clientX = e.clientX || (e.touches && e.touches[0].clientX);
+        const clientY = e.clientY || (e.touches && e.touches[0].clientY);
+        if (!clientX || !clientY) return;
+        const x = (clientX - rect.left) * (size / rect.width);
+        const y = (clientY - rect.top) * (size / rect.height);
+        const dx = x - center;
+        const dy = y - center;
+        if (Math.sqrt(dx * dx + dy * dy) > radius) return;
+        const pixel = ctx.getImageData(Math.round(x), Math.round(y), 1, 1).data;
+        if (pixel[3] === 0) return;
+        const r = pixel[0], g = pixel[1], b = pixel[2];
+        const hex = '#' + [r, g, b].map(v => v.toString(16).padStart(2, '0')).join('');
+        document.getElementById('color-input').value = hex;
+        drawCursor(x, y);
+        convertColor();
+      }
+
+      let dragging = false;
+      canvas.addEventListener('mousedown', e => { dragging = true; pickColor(e); });
+      canvas.addEventListener('mousemove', e => { if (dragging) pickColor(e); });
+      document.addEventListener('mouseup', () => { dragging = false; });
+      canvas.addEventListener('touchstart', e => { e.preventDefault(); pickColor(e); }, { passive: false });
+      canvas.addEventListener('touchmove', e => { e.preventDefault(); pickColor(e); }, { passive: false });
+    }
+
+    // ── Initialize ───────────────────────────────────
     generatePassword();
+    initColorWheel();
   </script>
 
   <!-- JSON-LD structured data for SEO -->

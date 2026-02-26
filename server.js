@@ -3,6 +3,12 @@ const path = require('path');
 const app = express();
 const PORT = process.env.PORT || 3000;
 
+// CORS for cover images
+app.use('/cover-', (req, res, next) => {
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  next();
+});
+
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.json());
 
@@ -157,3 +163,5 @@ app.post('/api/color', (req, res) => {
 app.listen(PORT, () => {
   console.log(`QuickTools running on http://localhost:${PORT}`);
 });
+
+module.exports = app;
