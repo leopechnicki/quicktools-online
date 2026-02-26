@@ -1,0 +1,12 @@
+{
+  "name": "quicktools-online",
+  "version": "1.0.0",
+  "description": "Free online utility tools - monetized with ads",
+  "scripts": {
+    "dev": "node server.js",
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "express": "^4.21.0"
+  }
+}

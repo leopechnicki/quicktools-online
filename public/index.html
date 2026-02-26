@@ -1,0 +1,618 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>QuickTools Online - Free Developer & Writer Utilities</title>
+  <meta name="description" content="Free online tools: word counter, JSON formatter, password generator, Base64 encoder, hash generator, UUID generator, color converter, and more.">
+  <meta name="keywords" content="word counter, JSON formatter, password generator, Base64 encoder, hash generator, UUID generator, color converter, online tools, free tools, developer tools">
+  <link rel="canonical" href="https://quicktools.online">
+  <style>
+    :root {
+      --bg: #0f0f1a;
+      --surface: #1a1a2e;
+      --surface2: #222240;
+      --accent: #e94560;
+      --accent2: #0f3460;
+      --text: #eee;
+      --text2: #aaa;
+      --radius: 12px;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+    }
+    header {
+      text-align: center;
+      padding: 40px 20px 20px;
+      background: linear-gradient(135deg, var(--surface) 0%, var(--accent2) 100%);
+      border-bottom: 2px solid var(--accent);
+    }
+    header h1 { font-size: 2.2rem; margin-bottom: 8px; }
+    header h1 span { color: var(--accent); }
+    header p { color: var(--text2); font-size: 1.1rem; }
+
+    /* Ad placeholder */
+    .ad-banner {
+      background: var(--surface2);
+      text-align: center;
+      padding: 15px;
+      color: var(--text2);
+      font-size: 0.85rem;
+      border-bottom: 1px solid #333;
+    }
+
+    nav {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      padding: 20px;
+      justify-content: center;
+      max-width: 900px;
+      margin: 0 auto;
+    }
+    nav button {
+      background: var(--surface);
+      color: var(--text);
+      border: 1px solid #333;
+      padding: 10px 18px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 0.9rem;
+      transition: all 0.2s;
+    }
+    nav button:hover, nav button.active {
+      background: var(--accent);
+      border-color: var(--accent);
+    }
+
+    .container {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+    .tool-panel {
+      display: none;
+      background: var(--surface);
+      border-radius: var(--radius);
+      padding: 30px;
+      border: 1px solid #333;
+    }
+    .tool-panel.active { display: block; }
+    .tool-panel h2 { color: var(--accent); margin-bottom: 15px; font-size: 1.5rem; }
+    .tool-panel p.desc { color: var(--text2); margin-bottom: 20px; }
+
+    textarea, input[type="text"], input[type="number"], select {
+      width: 100%;
+      background: var(--bg);
+      color: var(--text);
+      border: 1px solid #444;
+      border-radius: 8px;
+      padding: 12px;
+      font-size: 0.95rem;
+      font-family: 'Consolas', 'Monaco', monospace;
+      resize: vertical;
+      margin-bottom: 12px;
+    }
+    textarea:focus, input:focus { outline: none; border-color: var(--accent); }
+
+    .btn {
+      background: var(--accent);
+      color: #fff;
+      border: none;
+      padding: 12px 24px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 1rem;
+      font-weight: 600;
+      transition: opacity 0.2s;
+      margin-right: 8px;
+      margin-bottom: 8px;
+    }
+    .btn:hover { opacity: 0.85; }
+    .btn-secondary { background: var(--accent2); }
+
+    .result {
+      background: var(--bg);
+      border: 1px solid #444;
+      border-radius: 8px;
+      padding: 15px;
+      margin-top: 15px;
+      font-family: 'Consolas', monospace;
+      white-space: pre-wrap;
+      word-break: break-all;
+      max-height: 400px;
+      overflow-y: auto;
+    }
+
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+      gap: 12px;
+      margin-top: 15px;
+    }
+    .stat-card {
+      background: var(--bg);
+      border-radius: 8px;
+      padding: 15px;
+      text-align: center;
+    }
+    .stat-card .number { font-size: 1.8rem; font-weight: 700; color: var(--accent); }
+    .stat-card .label { font-size: 0.8rem; color: var(--text2); margin-top: 4px; }
+
+    .row { display: flex; gap: 10px; align-items: center; margin-bottom: 12px; flex-wrap: wrap; }
+    .row label { min-width: 80px; color: var(--text2); }
+
+    .color-preview {
+      width: 80px;
+      height: 80px;
+      border-radius: 8px;
+      border: 2px solid #444;
+      display: inline-block;
+      vertical-align: middle;
+    }
+
+    footer {
+      text-align: center;
+      padding: 40px 20px;
+      color: var(--text2);
+      font-size: 0.85rem;
+    }
+
+    .copy-btn {
+      background: var(--accent2);
+      color: #fff;
+      border: none;
+      padding: 4px 12px;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 0.8rem;
+      float: right;
+    }
+
+    /* SEO: structured tool descriptions */
+    .seo-section {
+      max-width: 800px;
+      margin: 40px auto;
+      padding: 0 20px;
+    }
+    .seo-section h3 { color: var(--accent); margin: 20px 0 8px; }
+    .seo-section p { color: var(--text2); line-height: 1.6; margin-bottom: 10px; }
+
+    @media (max-width: 600px) {
+      header h1 { font-size: 1.5rem; }
+      nav button { padding: 8px 12px; font-size: 0.8rem; }
+      .tool-panel { padding: 20px; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Quick<span>Tools</span> Online</h1>
+    <p>Free developer and writer utilities — no signup required</p>
+  </header>
+
+  <!-- Ad placement: replace with your Google AdSense code -->
+  <div class="ad-banner" id="ad-top">
+    <!-- Google AdSense or Ezoic ad code goes here -->
+    <div style="height:90px;display:flex;align-items:center;justify-content:center;border:1px dashed #555;border-radius:8px;">
+      Ad Space — Replace with AdSense/Ezoic code
+    </div>
+  </div>
+
+  <nav id="tool-nav">
+    <button data-tool="word-counter" class="active">Word Counter</button>
+    <button data-tool="json-formatter">JSON Formatter</button>
+    <button data-tool="password-gen">Password Gen</button>
+    <button data-tool="base64">Base64</button>
+    <button data-tool="hash-gen">Hash Generator</button>
+    <button data-tool="uuid-gen">UUID Generator</button>
+    <button data-tool="lorem">Lorem Ipsum</button>
+    <button data-tool="color-convert">Color Converter</button>
+  </nav>
+
+  <div class="container">
+    <!-- Word Counter -->
+    <div class="tool-panel active" id="word-counter">
+      <h2>Word Counter</h2>
+      <p class="desc">Paste your text to get instant word, character, sentence, and paragraph counts with estimated reading time.</p>
+      <textarea id="wc-input" rows="8" placeholder="Paste or type your text here..."></textarea>
+      <div class="stats-grid" id="wc-stats">
+        <div class="stat-card"><div class="number" id="wc-words">0</div><div class="label">Words</div></div>
+        <div class="stat-card"><div class="number" id="wc-chars">0</div><div class="label">Characters</div></div>
+        <div class="stat-card"><div class="number" id="wc-chars-ns">0</div><div class="label">No Spaces</div></div>
+        <div class="stat-card"><div class="number" id="wc-sentences">0</div><div class="label">Sentences</div></div>
+        <div class="stat-card"><div class="number" id="wc-paragraphs">0</div><div class="label">Paragraphs</div></div>
+        <div class="stat-card"><div class="number" id="wc-reading">0 min</div><div class="label">Reading Time</div></div>
+      </div>
+    </div>
+
+    <!-- JSON Formatter -->
+    <div class="tool-panel" id="json-formatter">
+      <h2>JSON Formatter & Validator</h2>
+      <p class="desc">Paste your JSON to format, validate, and beautify it instantly.</p>
+      <textarea id="json-input" rows="8" placeholder='{"key": "value", "items": [1,2,3]}'></textarea>
+      <div class="row">
+        <label>Indent:</label>
+        <select id="json-indent" style="width:auto">
+          <option value="2">2 spaces</option>
+          <option value="4">4 spaces</option>
+          <option value="\t">Tab</option>
+        </select>
+        <button class="btn" onclick="formatJSON()">Format</button>
+        <button class="btn btn-secondary" onclick="minifyJSON()">Minify</button>
+      </div>
+      <div class="result" id="json-result" style="display:none"></div>
+    </div>
+
+    <!-- Password Generator -->
+    <div class="tool-panel" id="password-gen">
+      <h2>Password Generator</h2>
+      <p class="desc">Generate strong, random passwords instantly.</p>
+      <div class="row">
+        <label>Length:</label>
+        <input type="number" id="pw-length" value="16" min="4" max="128" style="width:80px">
+      </div>
+      <div class="row">
+        <label><input type="checkbox" id="pw-upper" checked> Uppercase</label>
+        <label><input type="checkbox" id="pw-lower" checked> Lowercase</label>
+        <label><input type="checkbox" id="pw-numbers" checked> Numbers</label>
+        <label><input type="checkbox" id="pw-symbols" checked> Symbols</label>
+      </div>
+      <button class="btn" onclick="generatePassword()">Generate Password</button>
+      <div class="result" id="pw-result" style="display:none"></div>
+    </div>
+
+    <!-- Base64 -->
+    <div class="tool-panel" id="base64">
+      <h2>Base64 Encoder / Decoder</h2>
+      <p class="desc">Encode or decode text using Base64 encoding.</p>
+      <textarea id="b64-input" rows="5" placeholder="Enter text to encode or decode..."></textarea>
+      <button class="btn" onclick="base64Action('encode')">Encode</button>
+      <button class="btn btn-secondary" onclick="base64Action('decode')">Decode</button>
+      <div class="result" id="b64-result" style="display:none"></div>
+    </div>
+
+    <!-- Hash Generator -->
+    <div class="tool-panel" id="hash-gen">
+      <h2>Hash Generator</h2>
+      <p class="desc">Generate MD5, SHA-1, SHA-256, and SHA-512 hashes from any text.</p>
+      <textarea id="hash-input" rows="4" placeholder="Enter text to hash..."></textarea>
+      <button class="btn" onclick="generateHash()">Generate Hashes</button>
+      <div id="hash-result" style="display:none;margin-top:15px"></div>
+    </div>
+
+    <!-- UUID Generator -->
+    <div class="tool-panel" id="uuid-gen">
+      <h2>UUID Generator</h2>
+      <p class="desc">Generate random UUIDs (v4) instantly.</p>
+      <div class="row">
+        <label>Count:</label>
+        <input type="number" id="uuid-count" value="5" min="1" max="100" style="width:80px">
+        <button class="btn" onclick="generateUUID()">Generate</button>
+      </div>
+      <div class="result" id="uuid-result" style="display:none"></div>
+    </div>
+
+    <!-- Lorem Ipsum -->
+    <div class="tool-panel" id="lorem">
+      <h2>Lorem Ipsum Generator</h2>
+      <p class="desc">Generate placeholder text for your designs and layouts.</p>
+      <div class="row">
+        <label>Count:</label>
+        <input type="number" id="lorem-count" value="3" min="1" max="50" style="width:80px">
+        <select id="lorem-type" style="width:auto">
+          <option value="paragraphs">Paragraphs</option>
+          <option value="sentences">Sentences</option>
+          <option value="words">Words</option>
+        </select>
+        <button class="btn" onclick="generateLorem()">Generate</button>
+      </div>
+      <div class="result" id="lorem-result" style="display:none"></div>
+    </div>
+
+    <!-- Color Converter -->
+    <div class="tool-panel" id="color-convert">
+      <h2>Color Converter</h2>
+      <p class="desc">Convert between HEX, RGB, and HSL color formats.</p>
+      <div class="row">
+        <input type="text" id="color-input" placeholder="#e94560 or rgb(233, 69, 96)" style="flex:1">
+        <button class="btn" onclick="convertColor()">Convert</button>
+      </div>
+      <div id="color-result" style="display:none;margin-top:15px"></div>
+    </div>
+  </div>
+
+  <!-- Ad placement: replace with your Google AdSense code -->
+  <div class="ad-banner" id="ad-bottom">
+    <div style="height:250px;display:flex;align-items:center;justify-content:center;border:1px dashed #555;border-radius:8px;max-width:800px;margin:0 auto;">
+      Ad Space — Replace with AdSense/Ezoic code
+    </div>
+  </div>
+
+  <!-- SEO content for search engines -->
+  <div class="seo-section">
+    <h3>Free Online Developer Tools</h3>
+    <p>QuickTools Online provides free, fast, and privacy-friendly utilities for developers and writers. All tools run directly in your browser or on our servers with no data stored. No account required.</p>
+    <h3>Word Counter</h3>
+    <p>Count words, characters, sentences, and paragraphs instantly. Get estimated reading time for your content. Perfect for bloggers, students, and content writers.</p>
+    <h3>JSON Formatter</h3>
+    <p>Format, validate, and beautify JSON data. Supports customizable indentation and minification.</p>
+    <h3>Password Generator</h3>
+    <p>Generate cryptographically secure random passwords. Customize length and character types for your security needs.</p>
+  </div>
+
+  <footer>
+    <p>QuickTools Online — Free utilities for developers and writers</p>
+    <p style="margin-top:8px">&copy; 2025-2026 QuickTools. All rights reserved.</p>
+  </footer>
+
+  <script>
+    // Tab navigation
+    document.querySelectorAll('#tool-nav button').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('#tool-nav button').forEach(b => b.classList.remove('active'));
+        document.querySelectorAll('.tool-panel').forEach(p => p.classList.remove('active'));
+        btn.classList.add('active');
+        document.getElementById(btn.dataset.tool).classList.add('active');
+      });
+    });
+
+    // Helper: copy to clipboard
+    function copyText(text) {
+      navigator.clipboard.writeText(text).then(() => {
+        // Brief visual feedback could be added
+      });
+    }
+
+    // Word Counter - live update
+    document.getElementById('wc-input').addEventListener('input', function() {
+      const text = this.value;
+      if (!text.trim()) {
+        ['wc-words','wc-chars','wc-chars-ns','wc-sentences','wc-paragraphs'].forEach(id =>
+          document.getElementById(id).textContent = '0');
+        document.getElementById('wc-reading').textContent = '0 min';
+        return;
+      }
+      const words = text.trim().split(/\s+/).filter(w => w.length > 0).length;
+      const chars = text.length;
+      const charsNS = text.replace(/\s/g, '').length;
+      const sentences = text.split(/[.!?]+/).filter(s => s.trim().length > 0).length;
+      const paragraphs = text.split(/\n\n+/).filter(p => p.trim().length > 0).length || (text.trim() ? 1 : 0);
+      const readingTime = Math.max(1, Math.ceil(words / 200));
+
+      document.getElementById('wc-words').textContent = words.toLocaleString();
+      document.getElementById('wc-chars').textContent = chars.toLocaleString();
+      document.getElementById('wc-chars-ns').textContent = charsNS.toLocaleString();
+      document.getElementById('wc-sentences').textContent = sentences.toLocaleString();
+      document.getElementById('wc-paragraphs').textContent = paragraphs.toLocaleString();
+      document.getElementById('wc-reading').textContent = `${readingTime} min`;
+    });
+
+    // JSON Formatter
+    function formatJSON() {
+      const input = document.getElementById('json-input').value;
+      const indentVal = document.getElementById('json-indent').value;
+      const indent = indentVal === '\\t' ? '\t' : parseInt(indentVal);
+      const resultEl = document.getElementById('json-result');
+      try {
+        const parsed = JSON.parse(input);
+        resultEl.textContent = JSON.stringify(parsed, null, indent);
+        resultEl.style.display = 'block';
+        resultEl.style.color = '#4ade80';
+      } catch (e) {
+        resultEl.textContent = 'Invalid JSON: ' + e.message;
+        resultEl.style.display = 'block';
+        resultEl.style.color = '#ef4444';
+      }
+    }
+    function minifyJSON() {
+      const input = document.getElementById('json-input').value;
+      const resultEl = document.getElementById('json-result');
+      try {
+        resultEl.textContent = JSON.stringify(JSON.parse(input));
+        resultEl.style.display = 'block';
+        resultEl.style.color = '#4ade80';
+      } catch (e) {
+        resultEl.textContent = 'Invalid JSON: ' + e.message;
+        resultEl.style.display = 'block';
+        resultEl.style.color = '#ef4444';
+      }
+    }
+
+    // Password Generator
+    async function generatePassword() {
+      const length = document.getElementById('pw-length').value;
+      const upper = document.getElementById('pw-upper').checked;
+      const lower = document.getElementById('pw-lower').checked;
+      const numbers = document.getElementById('pw-numbers').checked;
+      const symbols = document.getElementById('pw-symbols').checked;
+
+      // Client-side generation for speed
+      let chars = '';
+      if (lower) chars += 'abcdefghijklmnopqrstuvwxyz';
+      if (upper) chars += 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+      if (numbers) chars += '0123456789';
+      if (symbols) chars += '!@#$%^&*()_+-=[]{}|;:,.<>?';
+      if (!chars) chars = 'abcdefghijklmnopqrstuvwxyz';
+
+      const array = new Uint32Array(parseInt(length));
+      crypto.getRandomValues(array);
+      const password = Array.from(array).map(n => chars[n % chars.length]).join('');
+
+      const resultEl = document.getElementById('pw-result');
+      resultEl.innerHTML = `<button class="copy-btn" onclick="copyText('${password.replace(/'/g, "\\'")}')">Copy</button>${password}`;
+      resultEl.style.display = 'block';
+    }
+
+    // Base64
+    function base64Action(action) {
+      const input = document.getElementById('b64-input').value;
+      const resultEl = document.getElementById('b64-result');
+      try {
+        if (action === 'encode') {
+          resultEl.textContent = btoa(unescape(encodeURIComponent(input)));
+        } else {
+          resultEl.textContent = decodeURIComponent(escape(atob(input)));
+        }
+        resultEl.style.display = 'block';
+      } catch (e) {
+        resultEl.textContent = 'Error: Invalid input';
+        resultEl.style.display = 'block';
+      }
+    }
+
+    // Hash Generator
+    async function generateHash() {
+      const input = document.getElementById('hash-input').value;
+      const encoder = new TextEncoder();
+      const data = encoder.encode(input);
+
+      async function hash(algo) {
+        const hashBuffer = await crypto.subtle.digest(algo, data);
+        return Array.from(new Uint8Array(hashBuffer)).map(b => b.toString(16).padStart(2, '0')).join('');
+      }
+
+      const [sha1, sha256, sha512] = await Promise.all([
+        hash('SHA-1'), hash('SHA-256'), hash('SHA-512')
+      ]);
+
+      const resultEl = document.getElementById('hash-result');
+      resultEl.style.display = 'block';
+      resultEl.innerHTML = `
+        <div class="result" style="margin-bottom:8px"><button class="copy-btn" onclick="copyText('${sha1}')">Copy</button><strong>SHA-1:</strong><br>${sha1}</div>
+        <div class="result" style="margin-bottom:8px"><button class="copy-btn" onclick="copyText('${sha256}')">Copy</button><strong>SHA-256:</strong><br>${sha256}</div>
+        <div class="result"><button class="copy-btn" onclick="copyText('${sha512}')">Copy</button><strong>SHA-512:</strong><br>${sha512}</div>
+      `;
+    }
+
+    // UUID Generator
+    function generateUUID() {
+      const count = parseInt(document.getElementById('uuid-count').value) || 5;
+      const uuids = Array.from({ length: Math.min(count, 100) }, () => crypto.randomUUID());
+      const resultEl = document.getElementById('uuid-result');
+      resultEl.innerHTML = `<button class="copy-btn" onclick="copyText(this.parentElement.textContent.replace('Copy','').trim())">Copy</button>` + uuids.join('\n');
+      resultEl.style.display = 'block';
+    }
+
+    // Lorem Ipsum
+    function generateLorem() {
+      const count = parseInt(document.getElementById('lorem-count').value) || 3;
+      const type = document.getElementById('lorem-type').value;
+      const words = 'lorem ipsum dolor sit amet consectetur adipiscing elit sed do eiusmod tempor incididunt ut labore et dolore magna aliqua ut enim ad minim veniam quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur excepteur sint occaecat cupidatat non proident sunt in culpa qui officia deserunt mollit anim id est laborum'.split(' ');
+
+      function randWord() { return words[Math.floor(Math.random() * words.length)]; }
+      function randSentence() {
+        const len = 8 + Math.floor(Math.random() * 15);
+        const w = Array.from({ length: len }, randWord);
+        w[0] = w[0][0].toUpperCase() + w[0].slice(1);
+        return w.join(' ') + '.';
+      }
+      function randParagraph() {
+        return Array.from({ length: 3 + Math.floor(Math.random() * 5) }, randSentence).join(' ');
+      }
+
+      let result;
+      if (type === 'words') result = Array.from({ length: count }, randWord).join(' ');
+      else if (type === 'sentences') result = Array.from({ length: count }, randSentence).join(' ');
+      else result = Array.from({ length: count }, randParagraph).join('\n\n');
+
+      const resultEl = document.getElementById('lorem-result');
+      resultEl.innerHTML = `<button class="copy-btn" onclick="copyText(this.parentElement.textContent.replace('Copy','').trim())">Copy</button>` + result;
+      resultEl.style.display = 'block';
+    }
+
+    // Color Converter
+    function convertColor() {
+      const input = document.getElementById('color-input').value.trim();
+      const resultEl = document.getElementById('color-result');
+
+      let r, g, b;
+      try {
+        if (input.startsWith('#')) {
+          const hex = input.slice(1);
+          r = parseInt(hex.substr(0, 2), 16);
+          g = parseInt(hex.substr(2, 2), 16);
+          b = parseInt(hex.substr(4, 2), 16);
+        } else if (input.startsWith('rgb')) {
+          [r, g, b] = input.match(/\d+/g).map(Number);
+        } else if (input.startsWith('hsl')) {
+          const [h, s, l] = input.match(/[\d.]+/g).map(Number);
+          // HSL to RGB conversion
+          const sn = s / 100, ln = l / 100;
+          const c = (1 - Math.abs(2 * ln - 1)) * sn;
+          const x = c * (1 - Math.abs((h / 60) % 2 - 1));
+          const m = ln - c / 2;
+          let r1, g1, b1;
+          if (h < 60) [r1, g1, b1] = [c, x, 0];
+          else if (h < 120) [r1, g1, b1] = [x, c, 0];
+          else if (h < 180) [r1, g1, b1] = [0, c, x];
+          else if (h < 240) [r1, g1, b1] = [0, x, c];
+          else if (h < 300) [r1, g1, b1] = [x, 0, c];
+          else [r1, g1, b1] = [c, 0, x];
+          r = Math.round((r1 + m) * 255);
+          g = Math.round((g1 + m) * 255);
+          b = Math.round((b1 + m) * 255);
+        } else {
+          throw new Error('Unsupported format');
+        }
+
+        const toHex = n => n.toString(16).padStart(2, '0');
+        const max = Math.max(r, g, b) / 255, min = Math.min(r, g, b) / 255;
+        const ln = (max + min) / 2;
+        let h = 0, s = 0;
+        if (max !== min) {
+          const d = max - min;
+          s = ln > 0.5 ? d / (2 - max - min) : d / (max + min);
+          const rn = r/255, gn = g/255, bn = b/255;
+          if (rn === max) h = ((gn - bn) / d + (gn < bn ? 6 : 0)) / 6;
+          else if (gn === max) h = ((bn - rn) / d + 2) / 6;
+          else h = ((rn - gn) / d + 4) / 6;
+        }
+
+        const hex = `#${toHex(r)}${toHex(g)}${toHex(b)}`;
+        const rgb = `rgb(${r}, ${g}, ${b})`;
+        const hsl = `hsl(${Math.round(h*360)}, ${Math.round(s*100)}%, ${Math.round(ln*100)}%)`;
+
+        resultEl.style.display = 'block';
+        resultEl.innerHTML = `
+          <div style="display:flex;gap:20px;align-items:center;flex-wrap:wrap">
+            <div class="color-preview" style="background:${hex}"></div>
+            <div>
+              <div class="result" style="margin-bottom:8px;display:inline-block;padding:8px 16px"><strong>HEX:</strong> ${hex}</div><br>
+              <div class="result" style="margin-bottom:8px;display:inline-block;padding:8px 16px"><strong>RGB:</strong> ${rgb}</div><br>
+              <div class="result" style="display:inline-block;padding:8px 16px"><strong>HSL:</strong> ${hsl}</div>
+            </div>
+          </div>
+        `;
+      } catch (e) {
+        resultEl.style.display = 'block';
+        resultEl.innerHTML = '<div class="result" style="color:#ef4444">Invalid color. Use formats like #e94560, rgb(233, 69, 96), or hsl(350, 77%, 59%)</div>';
+      }
+    }
+
+    // Initialize: generate a password on load
+    generatePassword();
+  </script>
+
+  <!-- JSON-LD structured data for SEO -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebApplication",
+    "name": "QuickTools Online",
+    "description": "Free online developer and writer tools including word counter, JSON formatter, password generator, and more.",
+    "applicationCategory": "DeveloperApplication",
+    "operatingSystem": "Any",
+    "offers": {
+      "@type": "Offer",
+      "price": "0",
+      "priceCurrency": "USD"
+    }
+  }
+  </script>
+</body>
+</html>
