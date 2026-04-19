@@ -1,5 +1,6 @@
 const express = require('express');
 const path = require('path');
+const crypto = require('crypto');
 const app = express();
 const PORT = process.env.PORT || 3000;
 
@@ -10,7 +11,7 @@ app.use('/cover-', (req, res, next) => {
 });
 
 app.use(express.static(path.join(__dirname, 'public')));
-app.use(express.json());
+app.use(express.json({ limit: '100kb' }));
 
 // API: Word counter
 app.post('/api/word-count', (req, res) => {
@@ -78,9 +79,9 @@ app.post('/api/base64', (req, res) => {
 });
 
 // API: Hash generator
-const crypto = require('crypto');
 app.post('/api/hash', (req, res) => {
   const { text } = req.body;
+  if (!text) return res.status(400).json({ error: 'text is required' });
   res.json({
     md5: crypto.createHash('md5').update(text).digest('hex'),
     sha1: crypto.createHash('sha1').update(text).digest('hex'),
