@@ -1,9 +1,18 @@
+<div align="center">
+
 # QuickTools Online
 
-Free online developer and writer utilities — no signup required. Open source, fast, and privacy-friendly.
+**Free online developer and writer utilities — no signup required.**
 
-**Live:** [web-tool-eight.vercel.app](https://web-tool-eight.vercel.app)
-**GitHub:** [github.com/leopechnicki/quicktools-online](https://github.com/leopechnicki/quicktools-online)
+[![Live](https://img.shields.io/badge/live-web--tool--eight.vercel.app-3b82f6?style=flat-square)](https://web-tool-eight.vercel.app)
+[![license](https://img.shields.io/badge/license-open%20source-6366f1?style=flat-square)](https://github.com/leopechnicki/quicktools-online)
+[![Node.js](https://img.shields.io/badge/Node.js-Express-10b981?style=flat-square&logo=node.js)](https://nodejs.org)
+
+[Live App](https://web-tool-eight.vercel.app) · [GitHub](https://github.com/leopechnicki/quicktools-online)
+
+</div>
+
+---
 
 ## Tools
 
